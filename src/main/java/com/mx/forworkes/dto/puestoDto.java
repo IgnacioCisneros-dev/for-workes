@@ -14,5 +14,6 @@ public class puestoDto {
 
 	private long puesto_id;
 	private String descripcion;
+	private Boolean activo;
 
 }

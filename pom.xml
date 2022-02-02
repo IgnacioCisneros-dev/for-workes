@@ -75,6 +75,13 @@
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
+		<!-- dependencia necesaria para generar reportes en excel -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+
 
 	</dependencies>
 

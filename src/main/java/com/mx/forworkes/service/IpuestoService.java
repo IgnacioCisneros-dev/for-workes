@@ -2,6 +2,8 @@ package com.mx.forworkes.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.mx.forworkes.dto.puestoDto;
 import com.mx.forworkes.exception.PuestoException;
 
@@ -43,4 +45,9 @@ public interface IpuestoService {
 	 * @throws PuestoException
 	 */
 	public String eliminarpuesto(int puesto_id) throws PuestoException;
+	
+	/**
+	 * @throws PuestoException
+	 */
+	public void exportarPuestosAExcel(HttpServletResponse response) throws PuestoException;
 }

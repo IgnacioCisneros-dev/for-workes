@@ -48,7 +48,7 @@ public class puestoController {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * @param response
 	 * @param puesto_id
@@ -56,7 +56,7 @@ public class puestoController {
 	 * @throws IOException
 	 */
 	@GetMapping(value = "/buscar/{puesto_id}")
-	public List<puestoDto> buscarPuesto(HttpServletResponse response, @PathVariable int puesto_id) throws IOException{
+	public List<puestoDto> buscarPuesto(HttpServletResponse response, @PathVariable int puesto_id) throws IOException {
 		LOGGER.info("::BUSCANDO PUESTO POR ID::");
 		try {
 			return puestoService.buscarPuesto(puesto_id);
@@ -119,6 +119,21 @@ public class puestoController {
 			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
 		}
 		return null;
+	}
+
+	/**
+	 * @param response (exporta los puestos existentes a excel)
+	 * @throws IOException
+	 */
+	@GetMapping(value = "/exportar-excel")
+	public void exportarDatosAExcel(HttpServletResponse response) throws IOException {
+		LOGGER.info("::EXPORTANDO LOS PUESTOS A EXCEL::");
+		try {
+			puestoService.exportarPuestosAExcel(response);
+		} catch (PuestoException e) {
+			LOGGER.error("::ERROR AL GENERARL EL REPORTE ===> " + e.getMessage() + " ::");
+			((HttpServletResponse) response).sendError(e.getCodeError(), e.getMessage());
+		}
 	}
 
 }
