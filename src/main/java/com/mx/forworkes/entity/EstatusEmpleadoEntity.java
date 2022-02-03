@@ -1,0 +1,55 @@
+package com.mx.forworkes.entity;
+
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import lombok.Data;
+
+/**
+ * @author IgnacioCisnerosJuare
+ *
+ */
+
+@Entity
+@Table(name = "estatus_empleado")
+@Data
+public class EstatusEmpleadoEntity {
+
+	@Id
+	@Column(name = "estatus_empleado_id")
+	private Long estatusEmpleadoId;
+
+	@Column(name = "dias_totales_vacaciones")
+	private int diasVacaciones;
+
+	@Column(name = "dias_tomados")
+	private int diasTomados;
+
+	@Column(name = "dias_por_tomar")
+	private int diasPorTomar;
+
+	@Column(name = "dias_pendientes_por_autorizar")
+	private int diasPendientesPorAutorizar;
+
+	@Column(name = "antiguedad")
+	private int antiguedad;
+
+	@Column(name = "aguinaldo")
+	private int aguinaldo;
+
+	@Column(name = "aniversario")
+	private int aniversario;
+
+	@Column(name = "prima_vacacional")
+	private int primaVacacional;
+	
+	@OneToMany(mappedBy = "estatus_empleado")
+	private Set<EmpleadoEntity> empleado;
+	
+
+}

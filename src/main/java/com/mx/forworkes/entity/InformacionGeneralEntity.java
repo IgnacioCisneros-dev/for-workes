@@ -1,8 +1,11 @@
 package com.mx.forworkes.entity;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -40,4 +43,7 @@ public class InformacionGeneralEntity {
 
 	@Column(name = "padecimientos_medicos")
 	private String padecimientosMedicos;
+
+	@OneToMany(mappedBy = "informacion_personal")
+	private Set<EmpleadoEntity> empleado;
 }

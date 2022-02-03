@@ -1,0 +1,64 @@
+package com.mx.forworkes.entity;
+
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import lombok.Data;
+
+/**
+ * @author IgnacioCisnerosJuare
+ *
+ */
+
+@Entity
+@Table(name = "empleados")
+@Data
+public class EmpleadoEntity {
+
+	@Id
+	@Column(name = "empleado_id")
+	private long empleadoId;
+
+	@Column(name = "nombre")
+	private long nombre;
+
+	@Column(name = "apellido_paterno")
+	private long apellidoPaterno;
+
+	@Column(name = "apellido_matero")
+	private long apellidoMaterno;
+
+	@Column(name = "fecha_nacimiento")
+	private long fechaNacimiento;
+
+	@Column(name = "fecha_ingreso")
+	private Date fechaIngreso;
+
+	@Column(name = "domicilio")
+	private long domicilio;
+
+	@Column(name = "correo")
+	private long correo;
+
+	@ManyToOne
+	@JoinColumn(name = "puesto_id", nullable = false)
+	private PuestoEntity puesto;
+
+	@ManyToOne
+	@JoinColumn(name = "informacion_personal_id", nullable = false)
+	private InformacionGeneralEntity informacion_personal;
+
+	@ManyToOne
+	@JoinColumn(name = "estatus_empleado_id")
+	private EstatusEmpleadoEntity estatus_empleado;
+
+	public EmpleadoEntity() {
+	}
+
+}
