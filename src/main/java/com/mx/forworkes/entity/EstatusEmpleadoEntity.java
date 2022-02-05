@@ -1,5 +1,7 @@
 package com.mx.forworkes.entity;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -22,7 +24,7 @@ public class EstatusEmpleadoEntity {
 
 	@Id
 	@Column(name = "estatus_empleado_id")
-	private Long estatusEmpleadoId;
+	private long estatusEmpleadoId;
 
 	@Column(name = "dias_totales_vacaciones")
 	private int diasVacaciones;
@@ -40,13 +42,13 @@ public class EstatusEmpleadoEntity {
 	private int antiguedad;
 
 	@Column(name = "aguinaldo")
-	private int aguinaldo;
+	private Float aguinaldo;
 
 	@Column(name = "aniversario")
-	private int aniversario;
+	private Date aniversario;
 
 	@Column(name = "prima_vacacional")
-	private int primaVacacional;
+	private Float primaVacacional;
 	
 	@OneToMany(mappedBy = "estatus_empleado")
 	private Set<EmpleadoEntity> empleado;

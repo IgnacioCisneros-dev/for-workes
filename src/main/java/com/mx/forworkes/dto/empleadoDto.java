@@ -1,13 +1,25 @@
 package com.mx.forworkes.dto;
 
+import java.util.Date;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author IgnacioCisnerosJuare
- * DTO que muestra las propiedades de un empleado.
  */
+
+@Setter
+@Getter
 public class empleadoDto {
-	
-	private long empleado_id;
-	
+
+	private long empleadoId;
+	private String nombre;
+	private String apellidoPaterno;
+	private String apellidoMaterno;
+	private Date fechaNacimiento;
+	private Date fechaIngreso;
+	private String domicilio;
+	private String correo;
 
 }

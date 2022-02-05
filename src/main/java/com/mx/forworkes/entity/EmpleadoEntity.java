@@ -26,25 +26,25 @@ public class EmpleadoEntity {
 	private long empleadoId;
 
 	@Column(name = "nombre")
-	private long nombre;
+	private String nombre;
 
 	@Column(name = "apellido_paterno")
-	private long apellidoPaterno;
+	private String apellidoPaterno;
 
 	@Column(name = "apellido_matero")
-	private long apellidoMaterno;
+	private String apellidoMaterno;
 
 	@Column(name = "fecha_nacimiento")
-	private long fechaNacimiento;
+	private Date fechaNacimiento;
 
 	@Column(name = "fecha_ingreso")
 	private Date fechaIngreso;
 
 	@Column(name = "domicilio")
-	private long domicilio;
+	private String domicilio;
 
 	@Column(name = "correo")
-	private long correo;
+	private String correo;
 
 	@ManyToOne
 	@JoinColumn(name = "puesto_id", nullable = false)

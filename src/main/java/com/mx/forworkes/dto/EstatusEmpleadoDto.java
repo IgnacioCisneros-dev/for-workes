@@ -1,5 +1,8 @@
 package com.mx.forworkes.dto;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,8 +21,8 @@ public class EstatusEmpleadoDto {
 	private int diasPorTomar;
 	private int diasPendientesPorAutorizar;
 	private int antiguedad;
-	private int aguinaldo;
-	private int aniversario;
-	private int primaVacacional;
+	private Float aguinaldo;
+	private Date aniversario;
+	private Float primaVacacional;
 
 }

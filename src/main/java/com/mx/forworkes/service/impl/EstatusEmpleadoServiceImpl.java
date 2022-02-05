@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,16 +47,15 @@ public class EstatusEmpleadoServiceImpl implements IEstatusEmpleadoService {
 			EmpleadoEntity datosEmpleado = empleadoRepository.findByEmpleadoId(empleado_id);
 			if (datosEmpleado != null) {
 				EstatusEmpleadoDto statusDto = new EstatusEmpleadoDto();
-				EstatusEmpleadoDto estatusDto = new EstatusEmpleadoDto();
 				statusDto.setEstatusEmpleadoId(statusEmpleado.getEstatusEmpleadoId());
 				statusDto.setDiasVacaciones(calcularDiasTotalesDeVacaciones(empleado_id));
 				statusDto.setDiasTomados(statusEmpleado.getDiasTomados());
 				statusDto.setDiasPorTomar(statusEmpleado.getDiasPorTomar());
 				statusDto.setDiasPendientesPorAutorizar(statusEmpleado.getDiasPendientesPorAutorizar());
 				statusDto.setAntiguedad(calcularAntiguedad(datosEmpleado.getFechaIngreso()));
-//			statusDto.setAniversario(calcularAniversario(fechaIngreso));
-				statusDto.setAguinaldo(121);
-				statusDto.setPrimaVacacional(1);
+				statusDto.setAniversario(calcularAniversario(datosEmpleado.getFechaIngreso()));
+				statusDto.setAguinaldo(null);
+				statusDto.setPrimaVacacional(null);
 				return statusDto;
 			} else {
 				throw new ExceptionGlobal("Ocurrio un error al buscar los datos del empleado.", 404);
@@ -126,7 +126,6 @@ public class EstatusEmpleadoServiceImpl implements IEstatusEmpleadoService {
 			LocalDate fechaAlta = Instant.ofEpochMilli(fechaIngreso.getTime()).atZone(ZoneId.systemDefault())
 					.toLocalDate();
 			Period antiguedad = Period.between(fechaAlta, fechaActual);
-			LOGGER.error("::ANTIGUEDAD::" + antiguedad.getYears());
 			return antiguedad.getYears();
 
 		} catch (Exception e) {
@@ -140,11 +139,52 @@ public class EstatusEmpleadoServiceImpl implements IEstatusEmpleadoService {
 	 * 
 	 * @param fechaIngreso
 	 * @return
+	 * @throws ExceptionGlobal
 	 */
-	public String calcularAniversario(Date fechaIngreso) {
+	public Date calcularAniversario(Date fechaIngreso) throws ExceptionGlobal {
+		LOGGER.info("::CALCULANDO ANIVERSARION DE EMPLEADO::");
+		try {
+			DateTimeFormatter formato = DateTimeFormatter.ofPattern("d/MM/yyyy");
+			String fechaActual = LocalDate.now().toString();
+			String fechaAlta = Instant.ofEpochMilli(fechaIngreso.getTime()).atZone(ZoneId.systemDefault()).toLocalDate()
+					.toString();
+			LOGGER.info("::FECHAS ACTUAL::" + fechaActual);
+			String anioActual = fechaActual.substring(0, 4);
+			String subFechaIngreso = fechaAlta.substring(5);
+			String fechaFinal = anioActual + "-" + subFechaIngreso;
+			LOGGER.info("::FECHA DE ANIVERSARIO::" + fechaFinal);
+			LocalDate fechaAniversario = LocalDate.parse(fechaFinal);
+			LocalDate hoy = LocalDate.parse(fechaActual);
+			if (fechaAniversario.isAfter(hoy)) {
+				return convertirLocalDateToDate(fechaAniversario);
+			} else if (fechaAniversario.isBefore(hoy)) {
+				// SE LE AGREGA UN AÑO
+				fechaAniversario.plusYears(1);
+				return convertirLocalDateToDate(fechaAniversario);
+			}
+		} catch (Exception e) {
+			LOGGER.error("::ERROR -- OCURRIO EL SIGUIENTE ERROR AL CALCULAR EL ANIVERSARIO DEL EMPLEADO ====> ::"
+					+ e.getMessage());
+			throw new ExceptionGlobal(
+					"Ocurrio un error al calcular el aniversario del empleado, favor de comunicarse con soporte.", 500);
+		}
+		return null;
+	}
 
-		return "";
-
+	/**
+	 * Metodo que se encarga de convertir una fecha LocalDate a tipo Date
+	 * 
+	 * @param fechaAConvertir
+	 * @return fecha convertida a tipo Date
+	 */
+	public Date convertirLocalDateToDate(LocalDate fechaAConvertir) {
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		Date date = Date.from(fechaAConvertir.atStartOfDay(defaultZoneId).toInstant());
+		return date;
+	}
+	
+	public Float calcularAguinaldo(Date fechaIngre) {
+		return null;
 	}
 
 }
