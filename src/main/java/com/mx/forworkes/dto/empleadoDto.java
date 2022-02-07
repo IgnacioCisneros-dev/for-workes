@@ -21,5 +21,6 @@ public class empleadoDto {
 	private Date fechaIngreso;
 	private String domicilio;
 	private String correo;
+	private Double sueldoMensual;
 
 }

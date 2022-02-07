@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 /**
@@ -42,16 +44,16 @@ public class EstatusEmpleadoEntity {
 	private int antiguedad;
 
 	@Column(name = "aguinaldo")
-	private Float aguinaldo;
+	private Double aguinaldo;
 
 	@Column(name = "aniversario")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date aniversario;
 
 	@Column(name = "prima_vacacional")
-	private Float primaVacacional;
-	
+	private Double primaVacacional;
+
 	@OneToMany(mappedBy = "estatus_empleado")
 	private Set<EmpleadoEntity> empleado;
-	
 
 }

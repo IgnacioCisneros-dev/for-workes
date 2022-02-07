@@ -1,13 +1,19 @@
 package com.mx.forworkes.service.impl;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+
+import org.apache.commons.math3.dfp.Dfp;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.formula.functions.Days360;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.mx.forworkes.dto.EstatusEmpleadoDto;
@@ -26,6 +32,7 @@ import com.mx.forworkes.service.IEstatusEmpleadoService;
 public class EstatusEmpleadoServiceImpl implements IEstatusEmpleadoService {
 
 	private static final Logger LOGGER = LogManager.getLogger(EstatusEmpleadoServiceImpl.class);
+	private static final DecimalFormat df = new DecimalFormat("0.00");
 
 	@Autowired
 	private IEstatusEmpleadoRepository estatusRepository;
@@ -54,8 +61,10 @@ public class EstatusEmpleadoServiceImpl implements IEstatusEmpleadoService {
 				statusDto.setDiasPendientesPorAutorizar(statusEmpleado.getDiasPendientesPorAutorizar());
 				statusDto.setAntiguedad(calcularAntiguedad(datosEmpleado.getFechaIngreso()));
 				statusDto.setAniversario(calcularAniversario(datosEmpleado.getFechaIngreso()));
-				statusDto.setAguinaldo(null);
-				statusDto.setPrimaVacacional(null);
+				statusDto.setAguinaldo(
+						calcularAguinaldo(datosEmpleado.getFechaIngreso(), datosEmpleado.getSueldoMensual()));
+				statusDto.setPrimaVacacional(calcularPrivaVacacional(calcularDiasTotalesDeVacaciones(empleado_id),
+						datosEmpleado.getSueldoMensual()));
 				return statusDto;
 			} else {
 				throw new ExceptionGlobal("Ocurrio un error al buscar los datos del empleado.", 404);
@@ -182,9 +191,49 @@ public class EstatusEmpleadoServiceImpl implements IEstatusEmpleadoService {
 		Date date = Date.from(fechaAConvertir.atStartOfDay(defaultZoneId).toInstant());
 		return date;
 	}
-	
-	public Float calcularAguinaldo(Date fechaIngre) {
-		return null;
+
+	/**
+	 * Metodo que calcula el aguinaldo del empleado de acuerdo a si antiguedad y
+	 * salario mensual
+	 * 
+	 * @param fechaIngre
+	 * @param sueldoMensual
+	 * @return el aguinaldo correspondiente del empleado
+	 */
+	public Double calcularAguinaldo(Date fechaIngreso, Double sueldoMensual) {
+		LOGGER.info("::CALCULANDO AGUINALDO DEL EMPLEADO::");
+		// FORMULA PARA CALCULAR EL AGUINALDO
+		// SALARIO DIARIO * 15 / 365 * DIAS TRABAJADOS
+
+		// FORMULA PARA SALARIO DIARIO: SALARIO AL MES / 30
+		double salarioDiario = sueldoMensual / 30;
+		// CALCULADO LOS DIAS TRABAJADOS
+		LocalDate fechaActual = LocalDate.now();
+		LocalDate fechaAlta = Instant.ofEpochMilli(fechaIngreso.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+//		Period dias = Period.between(fechaAlta, fechaActual);
+		long dias = fechaAlta.until(fechaActual, ChronoUnit.DAYS);
+		int diasTrabajados = (int) dias;
+		double aguinaldo = salarioDiario * 15 / 365 * diasTrabajados;
+		String AguinaldoCorrespondiente = df.format(aguinaldo);
+		return Double.parseDouble(AguinaldoCorrespondiente);
+	}
+
+	/**
+	 * Metodo que calcula el procentaje de prima vacacional para el empleado
+	 * 
+	 * @param diasVacaciones
+	 * @param sueldoMensual
+	 * @return prima vacacional del empleado
+	 */
+	public Double calcularPrivaVacacional(int diasVacaciones, double sueldoMensual) {
+		// FORMULA PARA CALCULAR LA PRIMA VACACIONAL
+		// PRIMA = salarioDiario * dias de vacaciones * .25
+		double porcentaje = .25;
+		double salarioDiario = sueldoMensual / 30;
+		double salarioPorVacaciones = salarioDiario * diasVacaciones;
+		double total = salarioPorVacaciones * porcentaje;
+		String primavacacional = df.format(total);
+		return Double.parseDouble(primavacacional);
 	}
 
 }

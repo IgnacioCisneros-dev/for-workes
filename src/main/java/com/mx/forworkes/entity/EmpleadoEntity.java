@@ -46,6 +46,9 @@ public class EmpleadoEntity {
 	@Column(name = "correo")
 	private String correo;
 
+	@Column(name = "sueldo_mensual")
+	private Double sueldoMensual;
+
 	@ManyToOne
 	@JoinColumn(name = "puesto_id", nullable = false)
 	private PuestoEntity puesto;

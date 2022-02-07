@@ -1,8 +1,7 @@
 package com.mx.forworkes.dto;
 
-import java.math.BigDecimal;
 import java.util.Date;
-
+import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,8 +20,9 @@ public class EstatusEmpleadoDto {
 	private int diasPorTomar;
 	private int diasPendientesPorAutorizar;
 	private int antiguedad;
-	private Float aguinaldo;
+	private Double aguinaldo;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date aniversario;
-	private Float primaVacacional;
+	private Double primaVacacional;
 
 }
